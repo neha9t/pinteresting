@@ -1,5 +1,8 @@
 class PinsController < ApplicationController
   before_action :set_pin, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:show, :index]
+  before_action :correct_user, only: [:edit, :update, :destroy]
+  
 
   # GET /pins
   # GET /pins.json
@@ -25,7 +28,6 @@ class PinsController < ApplicationController
   # POST /pins.json
   def create
     @pin = current_user.pins.build(pin_params)
-    respond_to do |format|
       if @pin.save
         redirect_to @pin, notice: 'Pin was successfully created.'
       else
@@ -65,5 +67,4 @@ class PinsController < ApplicationController
     def pin_params
       params.require(:pin).permit(:description, :image)
     end
-  end
 end
